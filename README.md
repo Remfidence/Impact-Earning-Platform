@@ -1,1 +1,1 @@
-# Impact-Earning-Platform
+# Impact Earning Platform

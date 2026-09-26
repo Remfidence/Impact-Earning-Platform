@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impact Earning Platform • Admin Panel</title>
+
+      <!-- Favicon -->
+    <link href="Impact Earning Platform  - Copy.png" rel="icon" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body:        #f5f7fb;
+            --bg-card:        rgba(255, 255, 255, 0.78);
+            --bg-sidebar:     rgba(255, 255, 255, 0.92);
+            --border:         rgba(229, 231, 235, 0.8);
+            --shadow-sm:      0 4px 15px -2px rgba(0,0,0,0.06);
+            --shadow-md:      0 10px 25px -5px rgba(0,0,0,0.08);
+            --shadow-glass:   0 8px 32px rgba(31,38,135,0.07);
+            --text-primary:   #1e293b;
+            --text-secondary: #64748b;
+            --accent:         #6366f1;
+            --success:        #10b981;
+            --danger:         #ef4444;
+            --warning:        #f59e0b;
+            --radius:         14px;
+            --transition:     all 0.22s ease;
+        }
+
+        * { box-sizing: border-box; margin:0; padding:0; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            min-height: 100vh;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .glass {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-glass);
+            border-radius: var(--radius);
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--bg-sidebar);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid var(--border);
+            padding: 24px 0;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sidebar-header {
+            padding: 0 24px 32px;
+            text-align: center;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -0.5px;
+            margin: 0;
+        }
+
+        .sidebar nav a {
+            display: flex;
+            align-items: center;
+            padding: 13px 24px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            margin: 4px 12px;
+            border-radius: 10px;
+        }
+
+        .sidebar nav a:hover {
+            background: rgba(99, 102, 241, 0.08);
+            color: var(--accent);
+        }
+
+        .sidebar nav a.active {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 14px rgba(99,102,241,0.25);
+        }
+
+        .sidebar nav a span.icon {
+            margin-right: 12px;
+            font-size: 1.15rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 32px 40px;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin-bottom: 32px;
+            color: var(--text-primary);
+        }
+
+        h3.section-title {
+            font-size: 1.38rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .card {
+            padding: 28px;
+            border-radius: var(--radius);
+        }
+
+        label {
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 0.97rem;
+            background: rgba(255,255,255,0.5);
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.94rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary    { background: var(--accent);    color: white; }
+        .btn-success    { background: var(--success);   color: white; }
+        .btn-danger     { background: var(--danger);    color: white; }
+        .btn-secondary  { background: #6b7280;         color: white; }
+
+        .btn:hover {
+            filter: brightness(1.08);
+            transform: translateY(-1px);
+        }
+
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .list-header {
+            display: flex;
+            background: rgba(226,232,240,0.6);
+            padding: 12px 20px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-radius: var(--radius) var(--radius) 0 0;
+            font-size: 0.9rem;
+        }
+
+        .list-item {
+            display: flex;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .list-item:hover {
+            background: rgba(243,244,246,0.7);
+        }
+
+        .list-item > span {
+            flex: 1;
+            padding: 0 8px;
+            min-height: 24px;
+        }
+
+        .list-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .chip {
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .chip-pending  { background: #fef3c7; color: #92400e; }
+        .chip-approved { background: var(--success); color: white; }
+        .chip-rejected { background: var(--danger);  color: white; }
+
+        #loginOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(245,247,251,0.97);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-box {
+            background: white;
+            padding: 48px 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            width: 420px;
+            max-width: 92%;
+            text-align: center;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar { width: 220px; }
+            .main-content { margin-left: 220px; padding: 24px 28px; }
+        }
+
+        @media (max-width: 840px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 20px 0;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 24px 20px;
+            }
+            .sidebar nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+            }
+            .sidebar nav a {
+                padding: 10px 16px;
+                margin: 0;
+                font-size: 0.92rem;
+            }
+            .card-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="loginOverlay">
+    <div class="login-box glass">
+        <h3>🔐 Admin Access - Impact Earning Platform</h3>
+        <p id="loginMsg" style="color:var(--danger); min-height:1.4em; margin:12px 0;"></p>
+        <input type="password" id="adminPass" placeholder="Enter password" style="margin-bottom:16px;">
+        <button id="loginBtn" class="btn btn-primary" style="width:100%; padding:14px;">Enter Dashboard</button>
+    </div>
+</div>
+
+<div class="main-content" id="dashboard" style="display:none;">
+
+    <h1>Admin Dashboard</h1>
+
+    <!-- User Management -->
+    <div class="glass card" style="margin-bottom:32px;">
+        <h3 class="section-title">👤 User Management</h3>
+
+        <label>Select User</label>
+        <select id="userSelect" style="margin-bottom:24px;"></select>
+
+        <div class="card-grid">
+            <!-- Account Info -->
+            <div class="glass card">
+                <h4 style="margin-bottom:16px; color:var(--text-primary);">Account Information</h4>
+                <div style="display:grid; gap:10px; font-size:0.98rem;">
+                    <div><strong>Full Name:</strong> <span id="fullName">—</span></div>
+                    <div><strong>Email:</strong> <span id="email">—</span></div>
+                    <div><strong>Password:</strong> <span id="password">—</span></div>
+                    <div><strong>Account Balance:</strong> <span data-id="balance" style="color:var(--success); font-weight:700;">$0.00</span></div>
+                    <div><strong>Total Profit:</strong> <span data-id="totalProfit" style="color: #007bff; font-weight:700;">$0.00</span></div>
+                </div>
+                <div class="btn-row" style="margin-top:20px;">
+                    <button id="editUserBtn" class="btn btn-secondary">✎ Edit Profile</button>
+                    <button id="deleteUserBtn" class="btn btn-danger">🗑 Delete User</button>
+                </div>
+
+                
+            </div>
+
+            <!-- Actions -->
+            <div class="glass card">
+                <h4 style="margin-bottom:16px; color:var(--text-primary);">Verification & Funds</h4>
+
+                <div style="margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid var(--border);">
+                    <strong>KYC Status:</strong>
+                    <span id="kycStatus" class="chip chip-pending" style="margin-left:10px;">Not submitted</span>
+                    <div class="btn-row" style="margin-top:14px;">
+                        <button id="approveKYC" class="btn btn-success">Approve KYC</button>
+                        <button id="rejectKYC" class="btn btn-danger">Reject KYC</button>
+                    </div>
+                    <br><br><hr><br>
+                    <h4 style="margin-bottom:16px; color:var(--text-primary);">Active Investments Plan</h4>
+<div style="margin-bottom:32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px;">
+    
+   <div id="admin-packages-display-wrapper" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; width: 100%;">
+    
+    <div class="no-plans-placeholder" style="grid-column: 1 / -1; padding: 30px; text-align: center; border: 1px dashed var(--border); border-radius: 12px; background: white; color: #666;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 10px; color: #aaa; display: block;"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span style="font-size: 0.9rem; font-weight: 500; display: block;">No Active Investment Packages</span>
+        <small style="font-size: 0.8rem; color: #999; display: block; margin-top: 4px;">Select an user from the list to populate active account plans.</small>
+    </div>
+
+</div>
+
+<hr style="border: 0; border-top: 1px solid var(--border); margin-bottom: 24px;">
+
+<h4 style="margin-bottom:16px; color:var(--text-primary);">Withdrawal Management</h4>
+<div style="margin-bottom:24px; padding:20px; border:1px solid var(--border); border-radius:12px; background: #f9f9f9;">
+    <div style="margin-bottom:10px;">
+        <strong>Requested Amount:</strong> 
+        <span id="requestedAmount" style="margin-left:10px; font-weight:bold; color:var(--danger); font-size:1.2rem;">$0.00</span>
+    </div>
+    <div style="margin-bottom:15px;">
+        <strong>Payment Details:</strong> 
+        <p id="paymentDetails" style="margin: 5px 0 0 0; font-family: monospace; background: #eee; padding: 8px; border-radius: 4px; font-size: 13px;">No pending request</p>
+    </div>
+    
+    <strong>Status:</strong>
+    <span id="withdrawalStatus" class="chip chip-pending" style="margin-left:10px;">No Request</span>
+
+    <div class="btn-row" style="margin-top:20px; display: flex; gap: 10px;">
+        <button id="approveWithdrawal" class="btn btn-success" style="flex:1">Approve Payout</button>
+        <button id="rejectWithdrawal" class="btn btn-danger" style="flex:1">Reject & Refund</button>
+    </div>
+</div>
+
+
+                
+                <label>Fund User <span id="currentWalletValue" style="float:right; color:var(--accent); font-weight:600;">(Select Wallet)</span></label>
+<select id="walletType" style="margin-bottom:12px;" onchange="updateWalletPreview()">
+    <option value="main">Account Balance</option>
+    <option value="earnings">Total Profit</option>
+</select>
+
+                <label>Amount</label>
+                <input type="number" id="amount" step="0.01" placeholder="125.50">
+
+                <div class="btn-row" style="margin-top:16px;">
+                    <button id="fundBtn"    class="btn btn-success">+ Fund Account</button>
+                    <button id="deductBtn"  class="btn btn-danger">- Deduct</button>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Transactions -->
+    <div class="glass card" style="margin-bottom:32px;">
+        <h3 class="section-title">💰 Transactions (editable)</h3>
+        <div class="list-header">
+            <span style="flex:2.2">Type</span>
+            <span style="flex:1">Amount</span>
+            <span style="flex:2">Status</span>
+            <span style="width:110px; text-align:right;">Actions</span>
+        </div>
+        <div id="transactionList"></div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="glass card" style="margin-bottom:32px;">
+        <h3 class="section-title">📩 Notifications</h3>
+
+        <h4 style="margin:24px 0 12px; font-weight:600;">Send New Notification</h4>
+
+        <label>Message Heading</label>
+        <input type="text" id="notifHeading" placeholder="e.g., Important Update" maxlength="80" style="margin-bottom:16px;">
+
+        <label>Message Body</label>
+        <textarea id="notifText" rows="4" placeholder="Type the full notification message here..."></textarea>
+
+        <button id="sendNotifBtn" class="btn btn-primary" style="margin-top:16px; padding:12px 24px;">Send Notification</button>
+
+        <h4 style="margin:40px 0 12px; font-weight:600;">Message History</h4>
+        <div class="list-header">
+            <span style="flex:3">Message:</span>
+        </div>
+        <div id="notifList"></div>
+    </div>
+
+    <!-- Payment Addresses (changed from Platform Configuration) -->
+    <div class="glass card">
+        <h3 class="section-title">💳 Payment Addresses</h3>
+        <div class="card-grid" style="margin-top:20px;">
+            <div>
+                <label>Bitcoin Deposit Address</label>
+                <textarea id="adminText1" rows="2" placeholder="bc1q..."></textarea>
+
+                <label style="margin-top:16px;">Ethereum Deposit Address</label>
+                <textarea id="adminText2" rows="2" placeholder="0x..."></textarea>
+            </div>
+            <div>
+                <label>USDT (TRC20) Address</label>
+                <textarea id="adminText3" rows="2" placeholder="T... or 0x..."></textarea>
+
+            
+            </div>
+        </div>
+        <button id="saveAdminTexts" class="btn btn-primary" style="width:100%; margin-top:24px; padding:14px 0;">Save Payment Addresses</button>
+    </div>
+
+    <div id="statusMsg" style="margin:32px 0; padding:14px; border-radius:10px; text-align:center; display:none; font-weight:500;"></div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getDatabase, ref, onValue, update, push, remove, set, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAeOAKLHkk3La2XKBQOseUzdWGHAFbt-8I",
+  authDomain: "revsharepro.firebaseapp.com",
+  databaseURL: "https://revsharepro-default-rtdb.firebaseio.com",
+  projectId: "revsharepro",
+  storageBucket: "revsharepro.firebasestorage.app",
+  messagingSenderId: "784548003945",
+  appId: "1:784548003945:web:7e5d7ae2277e2f8aad62f8",
+  measurementId: "G-X5VG810RS8"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+let currentSelectedUid = null;
+let cachedUsersData = {};
+let activeNotificationListener = null;
+let activeInvestmentSubListener = null;
+let activeWithdrawalListener = null; // Track withdrawal subscriber session reference
+let currentAggregatedPackageProfit = 0;
+
+const loginOverlay = document.getElementById("loginOverlay");
+const dashboard = document.getElementById("dashboard");
+const loginBtn = document.getElementById("loginBtn");
+const adminPassInput = document.getElementById("adminPass");
+const loginMsg = document.getElementById("loginMsg");
+
+if (loginBtn) loginBtn.addEventListener("click", performLocalGatewayCheck);
+if (adminPassInput) adminPassInput.addEventListener("keypress", (e) => { if (e.key === "Enter") performLocalGatewayCheck(); });
+
+function performLocalGatewayCheck() {
+    if (adminPassInput && adminPassInput.value === "1234") { 
+        if (loginOverlay) loginOverlay.style.display = "none";
+        if (dashboard) dashboard.style.display = "block";
+        initializeAdminPipelines();
+    } else {
+        if (loginMsg) loginMsg.innerText = "Invalid master administrative passcode entry.";
+    }
+}
+
+if (!loginOverlay) {
+    initializeAdminPipelines();
+}
+
+function initializeAdminPipelines() {
+    onValue(ref(db, "users"), (snapshot) => {
+        const data = snapshot.val() || {};
+        cachedUsersData = data;
+        populateUserDropdown(data);
+        if (currentSelectedUid && data[currentSelectedUid]) {
+            renderTargetUserMetrics(currentSelectedUid);
+        }
+    });
+
+    onValue(ref(db, "system/paymentAddresses"), (snapshot) => {
+        const paths = snapshot.val();
+        if (!paths) return;
+        if (document.getElementById("adminText1")) document.getElementById("adminText1").value = paths.btc || "";
+        if (document.getElementById("adminText2")) document.getElementById("adminText2").value = paths.eth || "";
+        if (document.getElementById("adminText3")) document.getElementById("adminText3").value = paths.usdt || "";
+        if (document.getElementById("adminText4")) document.getElementById("adminText4").value = paths.bnb || "";
+    });
+}
+
+const userSelect = document.getElementById("userSelect");
+if (userSelect) {
+    userSelect.addEventListener("change", (e) => {
+        currentSelectedUid = e.target.value;
+        if (currentSelectedUid) {
+            attachUserInvestmentsSubListener(currentSelectedUid);
+            attachUserNotificationsRealtimeListener(currentSelectedUid);
+            attachUserWithdrawalRealtimeListener(currentSelectedUid); // Hook real-time preview pipeline listener
+        } else {
+            clearDisplayElements();
+        }
+    });
+}
+
+function populateUserDropdown(users) {
+    if (!userSelect) return;
+    const previousSelection = userSelect.value;
+    userSelect.innerHTML = '<option value="">-- Select Active User --</option>';
+    
+    Object.keys(users).forEach(uid => {
+        const option = document.createElement("option");
+        option.value = uid;
+        option.textContent = users[uid].fullName || "Unnamed Account Profile";
+        userSelect.appendChild(option);
+    });
+
+    if (previousSelection && users[previousSelection]) {
+        userSelect.value = previousSelection;
+        currentSelectedUid = previousSelection;
+    }
+}
+
+function attachUserInvestmentsSubListener(uid) {
+    if (activeInvestmentSubListener) {
+        activeInvestmentSubListener(); 
+    }
+    currentAggregatedPackageProfit = 0;
+    const userInvestmentsRef = ref(db, 'investments/' + uid);
+    
+    activeInvestmentSubListener = onValue(userInvestmentsRef, (snapshot) => {
+        currentAggregatedPackageProfit = 0;
+        const packages = snapshot.val();
+        if (packages) {
+            Object.keys(packages).forEach((key) => {
+                const item = packages[key];
+                currentAggregatedPackageProfit += parseFloat(item.profitAccumulated || item.profitEarned || 0);
+            });
+        }
+        renderTargetUserMetrics(uid);
+        renderActivePackagesGrid(uid, packages);
+    });
+}
+
+// Dedicated real-time database listener updated to safely match data structure changes from "Withdraw Your funds.html"
+function attachUserWithdrawalRealtimeListener(uid) {
+    if (activeWithdrawalListener) {
+        activeWithdrawalListener();
+    }
+    
+    const targetPathRef = ref(db, `users/${uid}/pendingWithdrawal`);
+    activeWithdrawalListener = onValue(targetPathRef, (snapshot) => {
+        const data = snapshot.val();
+        const reqAmountEl = document.getElementById("requestedAmount");
+        const paymentDetailsEl = document.getElementById("paymentDetails");
+        const withdrawalStatusEl = document.getElementById("withdrawalStatus");
+        
+        if (!reqAmountEl || !paymentDetailsEl || !withdrawalStatusEl) return;
+
+        if (data) {
+            reqAmountEl.innerText = `$${parseFloat(data.amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            paymentDetailsEl.innerText = `Method: ${(data.method || 'Crypto').toUpperCase()}\nAddress Target: ${data.address || data.details || 'N/A'}`;
+            
+            const currentStat = data.status || "Pending";
+            withdrawalStatusEl.innerText = currentStat.toUpperCase();
+            
+            const standardStatus = currentStat.toLowerCase();
+            withdrawalStatusEl.className = `chip chip-${standardStatus === 'approved' || standardStatus === 'success' || standardStatus === 'completed' ? 'approved' : standardStatus === 'rejected' || standardStatus === 'failed' ? 'rejected' : 'pending'}`;
+        } else {
+            reqAmountEl.innerText = "$0.00";
+            paymentDetailsEl.innerText = "No pending request";
+            withdrawalStatusEl.innerText = "No Request";
+            withdrawalStatusEl.className = "chip chip-pending";
+        }
+    });
+}
+
+function renderTargetUserMetrics(uid) {
+    const user = cachedUsersData[uid];
+    if (!user) return;
+
+    if (document.getElementById("fullName")) document.getElementById("fullName").innerText = user.fullName || "—";
+    if (document.getElementById("email")) document.getElementById("email").innerText = user.email || "—";
+    if (document.getElementById("password")) document.getElementById("password").innerText = user.password || "—";
+    
+    // New Logic: Directly mirror the current total profit from the user's account balances
+    const walletBalance = parseFloat(user.balances?.walletBalance || 0);
+    const totalProfitFromAccount = parseFloat(user.balances?.totalProfit || user.totalProfit || 0);
+
+    // Dynamic addition incorporating active real-time investments profits matching package implementations
+    const combinedProfitValue = totalProfitFromAccount + currentAggregatedPackageProfit;
+    const totalProfit = combinedProfitValue === 0 ? 15.00 : combinedProfitValue;
+
+    const balanceEl = document.querySelector('[data-id="balance"]');
+    const profitEl = document.getElementById("totalProfit");
+
+    if (balanceEl) balanceEl.innerText = `$${walletBalance.toFixed(2)}`;
+    if (profitEl) profitEl.innerText = `$${totalProfit.toFixed(2)}`;
+    
+    updateWalletPreview();
+
+    const kycBadge = document.getElementById("kycStatus");
+    if (kycBadge) {
+        const kycState = (user.kycStatus || "unsubmitted").toLowerCase();
+        kycBadge.className = `chip chip-${kycState === 'approved' || kycState === 'successful' ? 'approved' : kycState === 'rejected' ? 'rejected' : 'pending'}`;
+        kycBadge.innerText = user.kycStatus || "unsubmitted";
+    }
+
+    renderUserTransactionsLedger(uid, user);
+}
+
+window.updateWalletPreview = function() {
+    if (!currentSelectedUid) return;
+    const user = cachedUsersData[currentSelectedUid];
+    if (!user) return;
+    const selection = document.getElementById("walletType") ? document.getElementById("walletType").value : "main";
+    const previewSpan = document.getElementById("currentWalletValue");
+    if (!previewSpan) return;
+    
+    if (selection === "main") {
+        previewSpan.innerText = `(Current: ${parseFloat(user.balances?.walletBalance || 0).toFixed(2)})`;
+    } else {
+        const dbProfit = parseFloat(user.balances?.totalProfit || 0);
+        const combinedProfitValue = dbProfit + currentAggregatedPackageProfit;
+        const displayedProfit = combinedProfitValue === 0 ? 15.00 : combinedProfitValue;
+        previewSpan.innerText = `(Current: ${displayedProfit.toFixed(2)})`;
+    }
+};
+
+if (document.getElementById("approveKYC")) document.getElementById("approveKYC").addEventListener("click", () => processKycStatusMutation("approved"));
+if (document.getElementById("rejectKYC")) document.getElementById("rejectKYC").addEventListener("click", () => processKycStatusMutation("rejected"));
+
+function processKycStatusMutation(outcome) {
+    if (!currentSelectedUid) return alert("Select targeted user identity context parameter line first.");
+    
+    const timestampStr = new Date().toISOString();
+    const atomicKycUpdates = {};
+    
+    atomicKycUpdates[`users/${currentSelectedUid}/kycStatus`] = outcome;
+    atomicKycUpdates[`users/${currentSelectedUid}/kycProcessedAt`] = timestampStr;
+    atomicKycUpdates[`kycSubmissions/${currentSelectedUid}/kycStatus`] = outcome;
+
+    update(ref(db), atomicKycUpdates)
+    .then(() => showStatus(`User KYC profile status has been locked to: ${outcome}`, "success"))
+    .catch(err => showStatus(`KYC Mutation Write Error: ${err.message}`, "danger"));
+}
+
+function renderActivePackagesGrid(uid, investmentsData) {
+    const packagesWrapper = document.getElementById('admin-packages-display-wrapper');
+    if (!packagesWrapper) return;
+    
+    packagesWrapper.innerHTML = '';
+
+    if (!investmentsData || Object.keys(investmentsData).length === 0) {
+        packagesWrapper.innerHTML = `
+            <div class="no-plans-placeholder" style="grid-column: 1 / -1; padding: 30px; text-align: center; border: 1px dashed var(--border); border-radius: 12px; background: white; color: #666; width: 100%;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 10px; color: #aaa; display: block;"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                <span style="font-size: 0.9rem; font-weight: 500; display: block;">No Active Investment Packages</span>
+                <small style="font-size: 0.8rem; color: #999; display: block; margin-top: 4px;">User profile currently holds no operational asset plans.</small>
+            </div>`;
+        return;
+    }
+
+    Object.keys(investmentsData).forEach((key) => {
+        const plan = investmentsData[key];
+        const planName = plan.planName || "Investment Plan";
+        const amount = parseFloat(plan.amountPurchased || plan.amount || 0).toFixed(2);
+        const profitEarned = parseFloat(plan.profitAccumulated || plan.profitEarned || 0).toFixed(2);
+        const duration = plan.duration || "7 Days";
+        const status = (plan.status || "active").toUpperCase();
+        
+        const dateAndTimeStr = plan.timestamp ? new Date(plan.timestamp).toLocaleString() : "N/A";
+
+        const badgeColor = status === 'ACTIVE' ? '#28a745' : status === 'COMPLETED' ? '#007bff' : '#6c757d';
+        const badgeBg = status === 'ACTIVE' ? '#e2f7e3' : status === 'COMPLETED' ? '#e2f0ff' : '#f8f9fa';
+
+        const cardHTML = `
+            <div class="plan-card" style="padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; gap: 10px; color: #111;">
+                <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                        <strong style="font-size: 0.95rem; color: #111;">${planName}</strong>
+                        <span style="font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: ${badgeBg}; color: ${badgeColor};">${status}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 4px 0;">
+                        <div>
+                            <small style="color: #666; display: block; font-size: 0.75rem;">Amount Invested</small>
+                            <span style="font-size: 1.15rem; font-weight: 900; color: #007bff;">$${amount}</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <small style="color: #666; display: block; font-size: 0.75rem;">Profit Earned</small>
+                            <span style="font-size: 1.15rem; font-weight: 900; color: #28a745;">+$${profitEarned}</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 0.8rem; color: #555;">
+                    <div>Duration Cycle: <strong>${duration}</strong></div>
+                    <div>Purchase Time: <strong>${dateAndTimeStr}</strong></div>
+                </div>
+            </div>
+        `;
+        packagesWrapper.insertAdjacentHTML('beforeend', cardHTML);
+    });
+}
+
+if (document.getElementById("approveWithdrawal")) document.getElementById("approveWithdrawal").addEventListener("click", () => processWithdrawalResolution("Approved"));
+if (document.getElementById("rejectWithdrawal")) document.getElementById("rejectWithdrawal").addEventListener("click", () => processWithdrawalResolution("Rejected"));
+
+// Processes approvals and denials perfectly mirroring the new payload keys
+function processWithdrawalResolution(decision) {
+    if (!currentSelectedUid) return alert("Please establish user context choice index sequence target.");
+    
+    get(ref(db, `users/${currentSelectedUid}`)).then((snapshot) => {
+        const user = snapshot.val();
+        if (!user || !user.pendingWithdrawal) throw new Error("No active settlement transaction elements await action.");
+        
+        const activePayout = user.pendingWithdrawal;
+        const globalId = activePayout.globalId;
+        const userWithdrawalKey = activePayout.id;
+        const updates = {};
+        const currentTimestamp = Date.now();
+
+        const finalTransactionPayload = {
+            id: userWithdrawalKey,
+            globalId: globalId || "",
+            userId: currentSelectedUid,
+            userEmail: user.email || "",
+            userName: user.fullName || "User Profile",
+            type: "Withdrawal",
+            amount: parseFloat(activePayout.amount || 0),
+            address: activePayout.address || "",
+            method: (activePayout.method || "BTC").toUpperCase(),
+            status: decision.toLowerCase() === "approved" ? "approved" : "rejected",
+            timestamp: currentTimestamp,
+            date: new Date(currentTimestamp).toISOString()
+        };
+
+        if (decision === "Approved") {
+            // 1. Remove the pending listener object view node flag
+            updates[`users/${currentSelectedUid}/pendingWithdrawal`] = null;
+            // 2. Overwrite operational history tables to complete status configuration
+            updates[`users/${currentSelectedUid}/withdrawals/${userWithdrawalKey}/status`] = "approved";
+            updates[`users/${currentSelectedUid}/transactions/${userWithdrawalKey}`] = finalTransactionPayload;
+            
+            if (globalId) {
+                updates[`withdrawals/${globalId}`] = finalTransactionPayload;
+            }
+        } else {
+            // Refund mathematical calculations
+            const currentProfitBalance = parseFloat(user.balances?.totalProfit || user.totalProfit || 0);
+            const payoutRefundValue = parseFloat(activePayout.amount || 0);
+            const absoluteRefundedValue = currentProfitBalance + payoutRefundValue;
+            
+            // 1. Return the deducted numerical payload funds back to total active profits nodes safely
+            updates[`users/${currentSelectedUid}/balances/totalProfit`] = absoluteRefundedValue;
+            updates[`users/${currentSelectedUid}/totalProfit`] = absoluteRefundedValue;
+            // 2. Drop the dashboard alert tracker flag node object cleanly
+            updates[`users/${currentSelectedUid}/pendingWithdrawal`] = null;
+            // 3. Log history statuses explicitly as rejected inside both index directory lists
+            updates[`users/${currentSelectedUid}/withdrawals/${userWithdrawalKey}/status`] = "rejected";
+            
+            finalTransactionPayload.type = `Rejected Withdrawal Refund`;
+            updates[`users/${currentSelectedUid}/transactions/${userWithdrawalKey}`] = finalTransactionPayload;
+
+            if (globalId) {
+                updates[`withdrawals/${globalId}`] = finalTransactionPayload;
+            }
+        }
+        return update(ref(db), updates);
+    })
+    .then(() => showStatus(`Payout sequence processing parameters completed: ${decision}`, "success"))
+    .catch(err => showStatus(`Payout Settlement Error: ${err.message}`, "danger"));
+}
+
+if (document.getElementById("fundBtn")) document.getElementById("fundBtn").addEventListener("click", () => handleBalanceAdjustment("add"));
+if (document.getElementById("deductBtn")) document.getElementById("deductBtn").addEventListener("click", () => handleBalanceAdjustment("subtract"));
+
+function handleBalanceAdjustment(actionType) {
+    if (!currentSelectedUid) return showStatus("Select an operational user target profile line first.", "danger");
+    const amountInput = document.getElementById("amount");
+    if (!amountInput) return;
+    const deltaValue = parseFloat(amountInput.value);
+    if (isNaN(deltaValue) || deltaValue <= 0) return showStatus("Input a valid arithmetic figure amount.", "danger");
+
+    const walletSelection = document.getElementById("walletType") ? document.getElementById("walletType").value : "main";
+    const targetDbKey = walletSelection === "main" ? "walletBalance" : "totalProfit";
+
+    get(ref(db, `users/${currentSelectedUid}`)).then((snapshot) => {
+        const user = snapshot.val();
+        if (!user) return showStatus("User account context path no longer exists.", "danger");
+
+        const baseCurrentValue = parseFloat(user.balances?.[targetDbKey] || 0);
+        const calculatedNewTotal = actionType === "add" ? baseCurrentValue + deltaValue : baseCurrentValue - deltaValue;
+
+        const updates = {};
+        updates[`users/${currentSelectedUid}/balances/${targetDbKey}`] = calculatedNewTotal;
+        
+        if (targetDbKey === "totalProfit") {
+            updates[`users/${currentSelectedUid}/totalProfit`] = calculatedNewTotal;
+        }
+
+        const targetLabel = walletSelection === "main" ? "Balance" : "Profit";
+        const txTypeString = actionType === "add" ? `Deposit (${targetLabel})` : `Deduction (${targetLabel})`;
+
+        const trackingTxRef = ref(db, `users/${currentSelectedUid}/transactions`);
+        const newTxKey = push(trackingTxRef).key;
+        updates[`users/${currentSelectedUid}/transactions/${newTxKey}`] = {
+            id: newTxKey,
+            type: txTypeString,
+            amount: deltaValue,
+            status: "approved",
+            timestamp: Date.now(),
+            date: new Date().toISOString()
+        };
+
+        return update(ref(db), updates);
+    }).then(() => {
+        showStatus(`Account balance parameters updated successfully.`, "success");
+        amountInput.value = "";
+    }).catch(err => showStatus(`Adjustment Processing Failure: ${err.message}`, "danger"));
+}
+
+function renderUserTransactionsLedger(uid, user) {
+    const txContainer = document.getElementById("transactionList");
+    if (!txContainer) return;
+    txContainer.innerHTML = "";
+
+    if (!user.transactions || Object.keys(user.transactions).length === 0) {
+        txContainer.innerHTML = '<div style="padding:16px; color:var(--text-secondary); text-align:center;">No transactions found.</div>';
+        return;
+    }
+
+    Object.entries(user.transactions).forEach(([txId, tx]) => {
+        const itemRow = document.createElement("div");
+        itemRow.style = "display:flex; flex-wrap:wrap; align-items:center; padding:12px; border-bottom:1px solid #eee; gap:10px;";
+        
+        const timestampFormatted = tx.timestamp ? new Date(tx.timestamp).toLocaleDateString() : 'N/A';
+        const displayType = tx.type || "Transaction";
+        const txStatus = (tx.status || "pending").toLowerCase();
+
+        itemRow.innerHTML = `
+            <div style="flex:1 1 100%; font-size:0.95rem; font-weight:600;">${displayType}</div>
+            <div style="flex:1 1 40%; font-size:0.85rem; color:#666;">${timestampFormatted}</div>
+            <div style="flex:1 1 30%; font-weight:bold; color:${txStatus === 'approved' || txStatus === 'success' ? '#10b981' : '#ef4444'}">$${parseFloat(tx.amount || 0).toFixed(2)}</div>
+            <div style="flex:1 1 100%; display:flex; gap:5px; justify-content:flex-end; margin-top:5px;">
+                <button onclick="removeLedgerEntry('${uid}','${txId}')" style="padding:5px 12px; background:#ef4444; color:white; border:none; border-radius:4px; cursor:pointer;">🗑</button>
+            </div>`;
+        txContainer.appendChild(itemRow);
+    });
+}
+
+window.removeLedgerEntry = function(uid, txId) {
+    if (!confirm("Permanently erase transaction?")) return;
+    remove(ref(db, `users/${uid}/transactions/${txId}`))
+        .then(() => showStatus("Transaction element dropped cleanly.", "success"));
+};
+
+function attachUserNotificationsRealtimeListener(uid) {
+    if (activeNotificationListener) {
+        activeNotificationListener(); 
+    }
+    const userNotifPathRef = ref(db, `users/${uid}/notifications`);
+    activeNotificationListener = onValue(userNotifPathRef, (snapshot) => {
+        renderTargetUserNotificationsHistory(snapshot.val());
+    });
+}
+
+function renderTargetUserNotificationsHistory(notificationsObj) {
+    const listContainer = document.getElementById("notifList");
+    if (!listContainer) return;
+    listContainer.innerHTML = "";
+
+    if (!notificationsObj || Object.keys(notificationsObj).length === 0) {
+        listContainer.innerHTML = '<div style="padding:16px; color:var(--text-secondary); text-align:center;">No direct profile alerts sent yet.</div>';
+        return;
+    }
+
+    const sorted = Object.entries(notificationsObj).sort((a, b) => (b[1].timestamp || 0) - (a[1].timestamp || 0));
+
+    sorted.forEach(([localKey, item]) => {
+        const row = document.createElement("div");
+        row.style = "display:flex; flex-wrap:wrap; padding:15px; border-bottom:1px solid #ddd; gap:5px;";
+        
+        row.innerHTML = `
+            <div style="flex:1 1 100%; font-weight:bold; word-break:break-word;">${item.title || 'Notification'}</div>
+            <div style="flex:1 1 100%; font-size:0.9rem; color:#444; word-break:break-word; overflow-wrap:break-word;">${item.msg || ''}</div>
+            <div style="flex:1 1 50%; font-size:0.75rem; color:#888;">Sent: ${item.date ? new Date(item.date).toLocaleDateString() : 'N/A'}</div>
+            <div style="flex:1 1 50%; text-align:right;">
+                <button onclick="purgeNotificationLog('${item.userId}','${localKey}','${item.globalId || ''}')" style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Delete</button>
+            </div>
+        `;
+        listContainer.appendChild(row);
+    });
+}
+
+window.purgeNotificationLog = function(userId, localKey, globalKey) {
+    if (!confirm("Are you sure you want to permanently delete this notification record?")) return;
+
+    const deletionUpdates = {};
+    if (userId && localKey) {
+        deletionUpdates[`users/${userId}/notifications/${localKey}`] = null;
+    }
+    if (globalKey) {
+        deletionUpdates[`notifications/${globalKey}`] = null;
+    }
+
+    update(ref(db), deletionUpdates)
+        .then(() => {
+            showStatus("Notification item purged cleanly.", "success");
+        })
+        .catch(err => {
+            showStatus(`Error destroying record node path: ${err.message}`, "danger");
+        });
+};
+
+if (document.getElementById("editUserBtn")) {
+    document.getElementById("editUserBtn").addEventListener("click", () => {
+        if (!currentSelectedUid) return alert("Select active target profile context line item.");
+        const currentName = document.getElementById("fullName") ? document.getElementById("fullName").innerText : "";
+        const inputPrompt = prompt("Modify client profile structural full name configuration:", currentName);
+        if (inputPrompt && inputPrompt.trim() !== "") {
+            update(ref(db, `users/${currentSelectedUid}`), { fullName: inputPrompt.trim() });
+        }
+    });
+}
+
+if (document.getElementById("deleteUserBtn")) {
+    document.getElementById("deleteUserBtn").addEventListener("click", () => {
+        if (!currentSelectedUid) return alert("Select targeted index tracking line.");
+        if (confirm(`CRITICAL HAZARD WARNING:\nAre you entirely sure you want to permanently delete this user account profile? This cannot be reversed.`)) {
+            remove(ref(db, `users/${currentSelectedUid}`))
+                .then(() => {
+                    currentSelectedUid = null;
+                    if (userSelect) userSelect.value = "";
+                    clearDisplayElements();
+                    showStatus("User identity index tracking nodes terminated cleanly.", "success");
+                });
+        }
+    });
+}
+
+function clearDisplayElements() {
+    if (activeNotificationListener) {
+        activeNotificationListener();
+        activeNotificationListener = null;
+    }
+    if (activeInvestmentSubListener) {
+        activeInvestmentSubListener();
+        activeInvestmentSubListener = null;
+    }
+    if (activeWithdrawalListener) {
+        activeWithdrawalListener();
+        activeWithdrawalListener = null;
+    }
+    currentAggregatedPackageProfit = 0;
+
+    if (document.getElementById("fullName")) document.getElementById("fullName").innerText = "—";
+    if (document.getElementById("email")) document.getElementById("email").innerText = "—";
+    if (document.getElementById("password")) document.getElementById("password").innerText = "—";
+    const balanceEl = document.querySelector('[data-id="balance"]');
+    if (balanceEl) balanceEl.innerText = "$0.00";
+    if (document.getElementById("totalProfit")) document.getElementById("totalProfit").innerText = "$0.00";
+    
+    const packagesWrapper = document.getElementById('admin-packages-display-wrapper');
+    if (packagesWrapper) {
+        packagesWrapper.innerHTML = `
+            <div class="no-plans-placeholder" style="grid-column: 1 / -1; padding: 30px; text-align: center; border: 1px dashed var(--border); border-radius: 12px; background: white; color: #666; width: 100%;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 10px; color: #aaa; display: block;"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                <span style="font-size: 0.9rem; font-weight: 500; display: block;">No Active Investment Packages</span>
+                <small style="font-size: 0.8rem; color: #999; display: block; margin-top: 4px;">Select an user from the list to populate active account plans.</small>
+            </div>`;
+    }
+    
+    const reqAmountEl = document.getElementById("requestedAmount");
+    const paymentDetailsEl = document.getElementById("paymentDetails");
+    const withdrawalStatusEl = document.getElementById("withdrawalStatus");
+    if (reqAmountEl) reqAmountEl.innerText = "$0.00";
+    if (paymentDetailsEl) paymentDetailsEl.innerText = "No pending request";
+    if (withdrawalStatusEl) {
+        withdrawalStatusEl.innerText = "No Request";
+        withdrawalStatusEl.className = "chip chip-pending";
+    }
+
+    const listContainer = document.getElementById("notifList");
+    if (listContainer) listContainer.innerHTML = "";
+}
+
+if (document.getElementById("saveAdminTexts")) {
+    document.getElementById("saveAdminTexts").addEventListener("click", () => {
+        const addressUpdates = {
+            btc: document.getElementById("adminText1") ? document.getElementById("adminText1").value.trim() : "",
+            eth: document.getElementById("adminText2") ? document.getElementById("adminText2").value.trim() : "",
+            usdt: document.getElementById("adminText3") ? document.getElementById("adminText3").value.trim() : "",
+            bnb: document.getElementById("adminText4") ? document.getElementById("adminText4").value.trim() : ""
+        };
+        set(ref(db, "system/paymentAddresses"), addressUpdates)
+            .then(() => showStatus("Platform system network collection addresses saved live successfully.", "success"))
+            .catch(err => showStatus(`Gateway addresses deployment fault instance: ${err.message}`, "danger"));
+    });
+}
+
+if (document.getElementById("sendNotifBtn")) {
+    document.getElementById("sendNotifBtn").addEventListener("click", () => {
+        if (!currentSelectedUid) {
+            alert("Please select an active target user profile from the dropdown before sending a notification.");
+            return;
+        }
+
+        const headingInput = document.getElementById("notifHeading");
+        const bodyTextarea = document.getElementById("notifText");
+
+        if (!headingInput || !bodyTextarea) return;
+
+        const titleVal = headingInput.value.trim();
+        const messageVal = bodyTextarea.value.trim();
+
+        if (!titleVal || !messageVal) {
+            alert("Both the notification heading and message body are required inputs.");
+            return;
+        }
+
+        const targetedUser = cachedUsersData[currentSelectedUid];
+        const userNotificationsRef = ref(db, `users/${currentSelectedUid}/notifications`);
+        const userNotifKey = push(userNotificationsRef).key;
+        const globalNotifKey = push(ref(db, "notifications")).key;
+        const currentTimestamp = Date.now();
+
+        const singleNotificationPayload = {
+            id: userNotifKey,
+            globalId: globalNotifKey,
+            userId: currentSelectedUid,
+            userName: targetedUser.fullName || "User Account",
+            userEmail: targetedUser.email || "",
+            title: titleVal,
+            msg: messageVal,
+            timestamp: currentTimestamp,
+            date: new Date(currentTimestamp).toISOString()
+        };
+
+        const dispatchUpdates = {};
+        dispatchUpdates[`users/${currentSelectedUid}/notifications/${userNotifKey}`] = singleNotificationPayload;
+        dispatchUpdates[`notifications/${globalNotifKey}`] = singleNotificationPayload;
+
+        update(ref(db), dispatchUpdates)
+            .then(() => {
+                showStatus("Notification successfully broadcasted to client profile screen.", "success");
+                headingInput.value = "";
+                bodyTextarea.value = "";
+            })
+            .catch(err => {
+                showStatus(`Notification dispatch fault error instance: ${err.message}`, "danger");
+            });
+    });
+}
+
+function showStatus(msg, variation) {
+    const alertBanner = document.getElementById("statusMsg");
+    if (!alertBanner) {
+        alert(msg);
+        return;
+    }
+    alertBanner.innerText = msg;
+    alertBanner.style.display = "block";
+    alertBanner.style.background = variation === "success" ? "rgba(16,185,129,0.15)\"" : "rgba(239,68,68,0.15)\"";
+    alertBanner.style.color = variation === "success" ? "#10b981" : "#ef4444";
+}
+</script>
+
+</body>
+</html>
